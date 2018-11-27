@@ -48,9 +48,12 @@ def drawTiles(screenn,mapp,x,y):
         while (x2 < getMapSize(mapp)[0]):
             char = getMapCoords(mapp,x2,y2)
             if char != "0":
-                img = getDataSprite(char,mapp)
+                img = getDataSprite(char[0],mapp)
                 if img != "0":
-                    screenn.blit(pygame.transform.scale(pygame.image.load(folder + img),(size,size)),((x2*size)+x,(y2*size)+y))
+                    newImage = pygame.image.load(folder + img)
+                    newImage = pygame.transform.rotate(newImage, int(char[1]))
+                    newImage = pygame.transform.flip(newImage,bool(char[2]),bool(char[3]))
+                    screenn.blit(newImage,(size,size),((x2*size)+x,(y2*size)+y))
             x2 += 1
         y2 += 1
 
@@ -97,16 +100,28 @@ def convertMapList(listt):
         i += 1
     return newList
 
+def convertMapBits(listt):
+    newList = ""
+    i = 0
+    while i < len(listt):
+        newList += listt[i]
+        if i != len(listt) - 1:
+            newList += ", "
+        i += 1
+    return newList    
 
-def addMapCoord(mapp,x,y,char):
+def addMapCoord(mapp,x,y,char,rotation,xbool,ybool):
     mappList = getMapList(mapp)
-    # mappList[y][x] = chr(char)
-    mappList[y] = mappList[y][0:x] + char + mappList[y][x+1:len(mappList[y])]
+    bit = char + "." + rotation + "." + xbool + "." + ybool
+    bitList = mappList[y].split(', ')
+    # mappList[y] = mappList[y][0:x] + bit + mappList[y][x+1:len(mappList[y])]
+    bitList[x] = bit
+    mappList = convertMapBits(bitList)
     newList = convertMapList(mappList)
     return convertMap(newList,getMapDataRaw(mapp))
 
 def getMapCoords(mapp,x,y):
-    mappList = (mapp.split(': ')[0]).split('; ')
+    mappList = (mapp.split(': ')[0]).split('; ').split(', ').split('.')
     return mappList[y][x]
 
 def getMapSize(mapp):

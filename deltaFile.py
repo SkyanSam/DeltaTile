@@ -1,6 +1,7 @@
 import pickle
 import deltaBase as deltaTile
-
+def mappLine(width):
+    mappLine = ("0.0.0.0, " * (width-1)) + "0.0.0.0; "
 def find(string,array,num,returnNum):
     val = ""
     i = 0
@@ -13,8 +14,7 @@ def find(string,array,num,returnNum):
     
 def addLayer(width,height,size):
     
-    mappLine = ("0.0.0, " * (width-1)) + "0.0.0; "
-    mapp = mappLine * (height-1) + mappLine
+    mapp = mappLine(width) * (height-1) + mappLine
     
     print("What type of map layer are you creating?")
     print("boundarymap, spritemap")
@@ -36,8 +36,7 @@ def addLayer(width,height,size):
     return layer
         
 def addDataLayer(width,height,size):
-    mappLine = ("0.0.0, " * (width-1)) + "0.0.0; "
-    mapp = mappLine * (height-1) + mappLine
+    mapp = mappLine(width) * (height-1) + mappLine
     
     keyy = ""
     typp = ""
