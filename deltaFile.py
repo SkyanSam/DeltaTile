@@ -2,19 +2,21 @@ import pickle
 import deltaBase as deltaTile
 def mappLine(width):
     mappLine = ("0.0.0.0, " * (width-1)) + "0.0.0.0; "
-def find(string,array,num,returnNum):
+    return mappLine
+def find(string,char,array,num,returnNum):
     val = ""
     i = 0
     while i < len(array):
-        if array[i][num] == string:
-            val = array[i][returnNum]
+        array2 = array[i].split(char)
+        if array2[num] == string:
+            val = array[returnNum]
         i += 1
     
     return val
     
 def addLayer(width,height,size):
     
-    mapp = mappLine(width) * (height-1) + mappLine
+    mapp = mappLine(width) * (height-1) + mappLine(width)
     
     print("What type of map layer are you creating?")
     print("boundarymap, spritemap")
@@ -36,7 +38,7 @@ def addLayer(width,height,size):
     return layer
         
 def addDataLayer(width,height,size):
-    mapp = mappLine(width) * (height-1) + mappLine
+    mapp = mappLine(width) * (height-1) + mappLine(width)
     
     keyy = ""
     typp = ""
@@ -45,10 +47,14 @@ def addDataLayer(width,height,size):
     print("Wheres the tiledata located at?")
     ans = input("")
     
-    tileData = ans.split(';').split(': ')
-    keyy = find("key",tileData,0,1)
-    typp = find("type",tileData,0,1)
-    location = find("location",tileData,0,1)
+    load_file = open(ans, 'r')
+    rawTileData = load_file.read
+    load_file.close()
+    
+    tileData = str(rawTileData).split('!')
+    keyy = find("key",': ',tileData,0,1)
+    typp = find("type",': ',tileData,0,1)
+    location = find("location",': ',tileData,0,1)
     
     layer = str(mapp) + ": " + str(keyy) + ": " + str(typp) + ": " + str(location) + ": " + str(size)
     
